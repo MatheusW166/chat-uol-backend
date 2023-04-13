@@ -4,5 +4,9 @@ const config = {
   url: process.env.DATABASE_URL,
 };
 
-const db = MongoDbAdapter(config);
+const db = new MongoDbAdapter(config);
+db.connect()
+  .then(() => console.log("Connected to db"))
+  .catch((err) => console.log(err));
+
 export default db;
