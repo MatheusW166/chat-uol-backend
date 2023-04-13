@@ -1,9 +1,10 @@
 import { Router } from "express";
+import { participantsController } from "./controllers/index.js";
 
 const router = Router();
 
-router.post("/participants", (req, res) => res.send("Hello"));
-router.get("/participants", (req, res) => res.send("Hello"));
+router.post("/participants", (_, res) => res.send("Hello"));
+router.get("/participants", participantsController.getParticipants);
 router.post("/messages", (req, res) => res.send("Hello"));
 router.get("/messages", (req, res) => res.send("Hello"));
 router.post("/status", (req, res) => res.send("Hello"));
