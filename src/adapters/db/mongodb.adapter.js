@@ -105,6 +105,17 @@ class MongoDbAdapter {
       throw Error(err.message);
     }
   };
+
+  deleteInactiveParticipants = async ({ inactiveMilliSeconds }) => {
+    try {
+      await this.connect();
+      const maxTime = Date.now() - inactiveMilliSeconds;
+      const collection = this.db.collection("participants");
+      return await collection.deleteMany({ lastStatus: { $lte: maxTime } });
+    } catch (err) {
+      throw Error(err.message);
+    }
+  };
 }
 
 export default MongoDbAdapter;
