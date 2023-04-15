@@ -9,7 +9,7 @@ app.use(json());
 app.use(cors());
 app.use(router);
 
-// scheduledTasks();
+scheduledTasks();
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`Running at ${PORT}`));

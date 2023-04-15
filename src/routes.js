@@ -15,6 +15,6 @@ router.post("/status", statusController.refreshStatus);
 
 // Bônus
 router.delete("/messages/:id", messagesController.deleteMessage);
-router.put("/messages/:id", (req, res) => res.send("Hello"));
+router.put("/messages/:id", messagesController.updateMessage);
 
 export default router;

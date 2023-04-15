@@ -136,6 +136,20 @@ class MongoDbAdapter {
       throw Error(err.message);
     }
   };
+
+  updateMessage = async ({ id, message }) => {
+    try {
+      await this.connect();
+      const collection = this.db.collection("messages");
+      const { from, to, text, type } = message;
+      return await collection.updateOne(
+        { _id: new ObjectId(id) },
+        { $set: { from, to, text, type } }
+      );
+    } catch (err) {
+      throw Error(err.message);
+    }
+  };
 }
 
 export default MongoDbAdapter;

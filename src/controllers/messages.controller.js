@@ -68,7 +68,39 @@ class MessagesController {
       }
       res.sendStatus(200);
     } catch (err) {
-      console.log(err);
+      res.sendStatus(500);
+    }
+  };
+  updateMessage = async (req, res) => {
+    const { id } = req.params;
+    const { user } = req.headers;
+    const message = { from: user, ...req.body };
+    const idValidation = validationAdapter.validateObjectId(id);
+    const messageValidation = validationAdapter.validateMessage(message);
+    const errors = [...idValidation.error, ...messageValidation.error];
+    try {
+      if (errors.length > 0) {
+        return res.status(422).send(errors);
+      }
+      const messageToUpdate = await db.findMessage({ id: idValidation.value });
+      if (!messageToUpdate) {
+        return res.sendStatus(404);
+      }
+      if (messageValidation.value.from !== messageToUpdate.from) {
+        return res.sendStatus(401);
+      }
+      const validMessage = {
+        ...messageValidation.value,
+      };
+      const { matchedCount } = await db.updateMessage({
+        id: idValidation.value,
+        message: validMessage,
+      });
+      if (matchedCount === 0) {
+        return res.sendStatus(404);
+      }
+      res.status(200).send(validMessage);
+    } catch (err) {
       res.sendStatus(500);
     }
   };
