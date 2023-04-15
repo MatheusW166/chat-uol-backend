@@ -31,7 +31,7 @@ class MessagesController {
         return res.status(422).send(error);
       }
       if (!(await db.findParticipant({ name: user }))) {
-        return res.status(401).send("User not found");
+        return res.status(422).send("User not found");
       }
       const validMessage = {
         ...value,
