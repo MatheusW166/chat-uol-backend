@@ -106,12 +106,22 @@ class MongoDbAdapter {
     }
   };
 
-  deleteInactiveParticipants = async ({ inactiveMilliSeconds }) => {
+  getInactiveParticipants = async ({ inactiveMilliSeconds }) => {
     try {
       await this.connect();
       const maxTime = Date.now() - inactiveMilliSeconds;
       const collection = this.db.collection("participants");
-      return await collection.deleteMany({ lastStatus: { $lte: maxTime } });
+      return await collection.find({ lastStatus: { $lte: maxTime } }).toArray();
+    } catch (err) {
+      throw Error(err.message);
+    }
+  };
+
+  deleteParticipant = async ({ id }) => {
+    try {
+      await this.connect();
+      const collection = this.db.collection("participants");
+      return await collection.deleteOne({ _id: new ObjectId(id) });
     } catch (err) {
       throw Error(err.message);
     }
