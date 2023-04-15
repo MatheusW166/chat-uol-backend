@@ -8,5 +8,5 @@ app.use(json());
 app.use(cors());
 app.use(router);
 
-const PORT = process.env.PORT ?? 5000;
-app.listen(PORT, () => console.log(`Running at PORT ${PORT}`));
+const PORT = process.env.PORT;
+app.listen(PORT, () => console.log(`Running at ${PORT}`));

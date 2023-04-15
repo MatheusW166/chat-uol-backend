@@ -1,12 +1,15 @@
 import { Router } from "express";
-import { participantsController } from "./controllers/index.js";
+import {
+  messagesController,
+  participantsController,
+} from "./controllers/index.js";
 
 const router = Router();
 
-router.post("/participants", (_, res) => res.send("Hello"));
+router.post("/participants", participantsController.joinUser);
 router.get("/participants", participantsController.getParticipants);
-router.post("/messages", (req, res) => res.send("Hello"));
-router.get("/messages", (req, res) => res.send("Hello"));
+router.post("/messages", messagesController.sendMessage);
+router.get("/messages", messagesController.getMessages);
 router.post("/status", (req, res) => res.send("Hello"));
 
 // Bônus
