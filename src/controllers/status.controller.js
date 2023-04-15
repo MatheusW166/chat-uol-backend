@@ -1,7 +1,6 @@
+import db from "../adapters/db/index.js";
+
 class StatusController {
-  constructor(db) {
-    this.db = db;
-  }
   async refreshStatus(req, res) {}
   async deleteInactives(req, res) {}
 }

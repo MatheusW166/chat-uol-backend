@@ -1,10 +1,9 @@
 import MessagesController from "./messages.controller.js";
 import ParticipantsController from "./participants.controller.js";
 import StatusController from "./status.controller.js";
-import db from "../adapters/index.js";
 
-const participantsController = new ParticipantsController(db);
-const messagesController = new MessagesController(db);
-const statusController = new StatusController(db);
+const participantsController = new ParticipantsController();
+const messagesController = new MessagesController();
+const statusController = new StatusController();
 
 export { participantsController, messagesController, statusController };
