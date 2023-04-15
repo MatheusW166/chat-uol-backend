@@ -30,7 +30,7 @@ class ValidationAdapter {
       from: Joi.string().trim().required(),
       to: Joi.string().trim().required(),
       text: Joi.string().trim().required(),
-      type: Joi.string().trim().equal("private_message", "message"),
+      type: Joi.string().trim().equal("private_message", "message").required(),
     });
     const { error, value } = messageSchema.validate(message);
     const errorMessagesArray = this.convertErrors(error);
