@@ -43,6 +43,35 @@ class MessagesController {
       res.sendStatus(500);
     }
   };
+  deleteMessage = async (req, res) => {
+    const { id } = req.params;
+    const { user } = req.headers;
+    const idValidation = validationAdapter.validateObjectId(id);
+    const userValidation = validationAdapter.validateString(user);
+    const errors = [...idValidation.error, ...userValidation.error];
+    try {
+      if (errors.length > 0) {
+        return res.sendStatus(422);
+      }
+      const message = await db.findMessage({ id: idValidation.value });
+      if (!message) {
+        return res.sendStatus(404);
+      }
+      if (userValidation.value !== message.from) {
+        return res.sendStatus(401);
+      }
+      const { deletedCount } = await db.deleteMessage({
+        id: idValidation.value,
+      });
+      if (deletedCount === 0) {
+        return res.sendStatus(404);
+      }
+      res.sendStatus(200);
+    } catch (err) {
+      console.log(err);
+      res.sendStatus(500);
+    }
+  };
 }
 
 export default MessagesController;

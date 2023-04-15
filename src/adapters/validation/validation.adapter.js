@@ -5,15 +5,24 @@ class ValidationAdapter {
   convertErrors = (errors) => {
     return errors?.details.map((err) => err.message) ?? [];
   };
+  validateObjectId = (id) => {
+    const strippedId = stripHtml(id).result;
+    const stringSchema = Joi.string()
+      .trim()
+      .pattern(/^([0-9a-f]{12}|[0-9a-f]{24})$/i);
+    const { error, value } = stringSchema.validate(strippedId);
+    const errorMessagesArray = this.convertErrors(error);
+    return { error: errorMessagesArray, value };
+  };
   validateString = (string) => {
-    const strippedString = stripHtml(string);
+    const strippedString = stripHtml(string).result;
     const stringSchema = Joi.string().trim().required();
     const { error, value } = stringSchema.validate(strippedString);
     const errorMessagesArray = this.convertErrors(error);
     return { error: errorMessagesArray, value };
   };
   validateLimit = (limit) => {
-    const strippedLimit = stripHtml(limit);
+    const strippedLimit = limit ? stripHtml(limit).result : limit;
     const numberSchema = Joi.number().min(1).optional();
     const { error, value } = numberSchema.validate(strippedLimit);
     const errorMessagesArray = this.convertErrors(error);
@@ -28,10 +37,10 @@ class ValidationAdapter {
       type: Joi.string().trim().equal("private_message", "message"),
     });
     const { error, value } = messageSchema.validate({
-      from: stripHtml(from),
-      to: stripHtml(to),
-      text: stripHtml(text),
-      type: stripHtml(type),
+      from: stripHtml(from).result,
+      to: stripHtml(to).result,
+      text: stripHtml(text).result,
+      type: stripHtml(type).result,
     });
     const errorMessagesArray = this.convertErrors(error);
     return { error: errorMessagesArray, value };

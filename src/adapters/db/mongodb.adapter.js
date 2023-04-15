@@ -1,4 +1,4 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 
 class MongoDbAdapter {
   constructor(config) {
@@ -112,6 +112,26 @@ class MongoDbAdapter {
       const maxTime = Date.now() - inactiveMilliSeconds;
       const collection = this.db.collection("participants");
       return await collection.deleteMany({ lastStatus: { $lte: maxTime } });
+    } catch (err) {
+      throw Error(err.message);
+    }
+  };
+
+  findMessage = async ({ id }) => {
+    try {
+      await this.connect();
+      const collection = this.db.collection("messages");
+      return await collection.findOne({ _id: new ObjectId(id) });
+    } catch (err) {
+      throw Error(err.message);
+    }
+  };
+
+  deleteMessage = async ({ id }) => {
+    try {
+      await this.connect();
+      const collection = this.db.collection("messages");
+      return await collection.deleteOne({ _id: new ObjectId(id) });
     } catch (err) {
       throw Error(err.message);
     }
