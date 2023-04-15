@@ -60,14 +60,21 @@ class MongoDbAdapter {
     }
   };
 
-  findMessages = async ({ limit }) => {
+  findAllowedMessages = async ({ limit, name }) => {
     try {
       await this.connect();
       const collection = this.db.collection("messages");
+      const result = collection.find({
+        $or: [
+          { from: name },
+          { type: { $in: ["status", "message"] } },
+          { to: { $in: [name, "Todos"] } },
+        ],
+      });
       if (limit) {
-        return await collection.find().limit(limit).toArray();
+        return await result.limit(limit).toArray();
       }
-      return await collection.find().toArray();
+      return await result.toArray();
     } catch (err) {
       throw Error(err.message);
     }
